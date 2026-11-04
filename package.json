@@ -1,0 +1,20 @@
+{
+  "name": "pdf-composer",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Compose PDFs in the browser: place images and text on PDF pages and export a new PDF. Stateless server.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test test/*.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "5.3.0",
+    "express": "5.3.0",
+    "pdf-lib": "1.17.1",
+    "pdfjs-dist": "4.10.38"
+  }
+}

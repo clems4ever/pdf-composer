@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>PDF Composer</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%234f46e5'/%3E%3Cpath d='M11 8h7l5 5v11H11z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/lib/inter/wght.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7z" fill="#fff"/><path d="M14 3v5h5" fill="#c7d2fe"/></svg></span>
+    <span class="brand-name">PDF Composer</span>
+    <span class="doc-meta" id="docMeta"></span>
+  </div>
+  <div class="top-actions">
+    <div class="btn-group">
+      <button class="icon-btn" id="undoBtn" title="Undo (Ctrl+Z)" data-icon="undo"></button>
+      <button class="icon-btn" id="redoBtn" title="Redo (Ctrl+Shift+Z)" data-icon="redo"></button>
+    </div>
+    <div class="btn-group zoom">
+      <button class="icon-btn desktop-only" id="zoomOut" title="Zoom out" data-icon="minus"></button>
+      <button class="zoom-label" id="zoomLabel" title="Fit to width">100%</button>
+      <button class="icon-btn desktop-only" id="zoomIn" title="Zoom in" data-icon="plus"></button>
+    </div>
+    <button class="icon-btn" id="clearAll" title="Clear document" data-icon="trash"></button>
+    <button class="btn-primary" id="exportBtn" data-icon="download"><span>Export</span></button>
+  </div>
+</header>
+
+<main id="stage">
+  <section id="empty">
+    <div class="empty-card">
+      <div class="empty-art" data-icon="upload"></div>
+      <h2>Compose your PDF</h2>
+      <p>Open a PDF or start from a blank page, then place images and text anywhere.</p>
+      <div class="empty-actions">
+        <button class="btn-primary lg" data-action="pdf" data-icon="filePlus"><span>Open PDF</span></button>
+        <button class="btn-secondary lg" data-action="page" data-icon="file"><span>Blank page</span></button>
+      </div>
+      <p class="empty-hint desktop-only">or drop PDFs and images anywhere on this window</p>
+    </div>
+  </section>
+  <div id="pages" hidden></div>
+</main>
+
+<div id="inspector" hidden>
+  <div class="insp-row">
+    <div class="insp-group" id="textTools">
+      <button class="tool" id="tEdit" title="Edit text (Enter)" data-icon="pencil"></button>
+      <select id="tFont" title="Font">
+        <option value="Helvetica">Helvetica</option>
+        <option value="Times">Times</option>
+        <option value="Courier">Courier</option>
+      </select>
+      <div class="stepper" title="Font size (pt)">
+        <button id="tSizeDown" aria-label="Smaller" data-icon="minus"></button>
+        <input id="tSize" type="number" inputmode="numeric" min="4" max="400">
+        <button id="tSizeUp" aria-label="Larger" data-icon="plus"></button>
+      </div>
+      <div class="seg">
+        <button class="tool" id="tBold" title="Bold" data-icon="bold"></button>
+        <button class="tool" id="tItalic" title="Italic" data-icon="italic"></button>
+      </div>
+      <div class="seg">
+        <button class="tool" id="tAlign-left" title="Align left" data-icon="alignLeft"></button>
+        <button class="tool" id="tAlign-center" title="Align centre" data-icon="alignCenter"></button>
+        <button class="tool" id="tAlign-right" title="Align right" data-icon="alignRight"></button>
+      </div>
+      <label class="swatch" title="Text colour"><input type="color" id="tColor"><span id="tColorDot"></span></label>
+    </div>
+    <div class="insp-group" id="imageTools">
+      <button class="tool wide" id="fitW" title="Fit to page" data-icon="fit"><span>Fit page</span></button>
+    </div>
+    <span class="divider"></span>
+    <label class="opacity" title="Opacity">
+      <i data-icon="droplet"></i>
+      <input type="range" id="opacity" min="0.05" max="1" step="0.05">
+      <span id="opacityVal">100%</span>
+    </label>
+    <span class="divider"></span>
+    <div class="insp-group">
+      <button class="tool" id="back" title="Send backward" data-icon="down2"></button>
+      <button class="tool" id="fwd" title="Bring forward" data-icon="up2"></button>
+      <button class="tool" id="dup" title="Duplicate (Ctrl+D)" data-icon="copy"></button>
+      <button class="tool danger" id="del" title="Delete (Del)" data-icon="trash"></button>
+    </div>
+  </div>
+</div>
+
+<nav id="dock">
+  <button class="dock-btn" data-action="pdf" data-icon="filePlus"><span>PDF</span></button>
+  <button class="dock-btn" data-action="image" data-icon="image"><span>Image</span></button>
+  <button class="dock-btn" data-action="text" data-icon="type"><span>Text</span></button>
+  <button class="dock-btn" data-action="page" data-icon="file"><span>Page</span></button>
+</nav>
+
+<div class="popover" id="sizeMenu" hidden>
+  <div class="popover-title">Add blank page</div>
+  <button data-size="595.28x841.89"><span class="pg-ico"></span>A4 <em>210 × 297 mm</em></button>
+  <button data-size="612x792"><span class="pg-ico"></span>Letter <em>8.5 × 11 in</em></button>
+  <button data-size="841.89x595.28"><span class="pg-ico land"></span>A4 landscape</button>
+  <button data-size="792x612"><span class="pg-ico land"></span>Letter landscape</button>
+</div>
+
+<div id="dropOverlay" hidden><div>Drop PDFs or images</div></div>
+<div id="toasts" aria-live="polite"></div>
+<div id="busy" hidden><div class="busy-card"><div class="spinner"></div><span id="busyText">Working…</span></div></div>
+
+<input type="file" id="pdfInput" accept="application/pdf,.pdf" multiple hidden>
+<input type="file" id="imgInput" accept="image/*" multiple hidden>
+
+<script src="/lib/pdf-lib/pdf-lib.min.js"></script>
+<script type="module" src="app.js"></script>
+</body>
+</html>
