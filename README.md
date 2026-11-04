@@ -53,3 +53,7 @@ The tag is created only after the image has been published, so a failed build ne
 
 - Text uses the standard PDF fonts (Helvetica, Times, Courier), which cover Western European characters. Other characters, such as emoji or non-Latin scripts, are replaced with `?`.
 - PDFs that need a password to open can't be imported. PDFs with only permission restrictions (no printing, no editing, and so on) can be imported, but the exported PDF doesn't keep those restrictions.
+
+## License
+
+[MIT](LICENSE)

@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "description": "Compose PDFs in the browser: place images and text on PDF pages and export a new PDF. Stateless server.",
+  "license": "MIT",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
