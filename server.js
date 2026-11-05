@@ -46,7 +46,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/healthz', (req, res) => res.type('text').send('ok'));
 app.use((req, res) => res.status(404).type('text').send('Not found'));
 
-const port = Number(process.env.PORT) || 8000;
+const port = process.env.PORT ? Number(process.env.PORT) : 8000; // PORT=0 picks a free port (tests)
 const server = app.listen(port, '0.0.0.0', () => console.log(`PDF Composer listening on :${port}`));
 
 // let `docker stop` shut down promptly
